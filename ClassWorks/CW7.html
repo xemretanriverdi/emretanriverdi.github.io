@@ -1,0 +1,23 @@
+function displayURL(u) {
+    fetch(u).then(r => r.blob())
+            .then(displayBlob)
+            .catch(e => disp1.innerText = e)
+}
+function displayBlob(f) {
+    console.assert(f instanceof Blob)
+    msg.innerText = f.size+" bytes "+f.type
+    disp1.innerText = ""; disp2.src = ""
+    
+    if (f.type.startsWith("image")) {
+        RDR.readAsDataURL(f); //display image
+        RDR.onload = () => disp2.src = RDR.result
+        console.log(f,RDR)
+    } else if (f.type.startsWith("text")) {
+        RDR.readAsText(f);  //display text
+        RDR.onload = () =>disp1.innerText=RDR.result
+        console.log(f, RDR)
+    } else {
+        msg.innerText += " -- Unknown"
+        
+    }
+}

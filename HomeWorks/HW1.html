@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Lüminans Değişimi</title>
+
+    <style>
+        body {
+            max-width: 440px;
+        }
+
+        pre {
+            overflow-x: auto;
+        }
+
+        input {
+            width: 50px
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2 id=title></h2>
+    <h4>Bu calısmada STM Savunma'da C++ QT Frameworkünde çalışmış oluğum Lüminans Değişimi Formulünü Kullandım</h4>
+    <h5>RGB 0-255 Arasında Olmalı</h5>
+
+    R = <input type=number id=red value=255 onChange="calculate()">
+    &emsp;
+    G = <input type=number id=green value=255 onChange="calculate()">
+    &emsp;
+    B = <input type=number id=blue value=255 onChange="calculate()">
+    &emsp;
+    <hr />
+    <span id=res></span>
+    <hr />
+    <pre id=out><b>Table</b></pre>
+    <hr />
+    <b>Sample code</b>
+    <pre id=sample></pre>
+
+    <hr />
+    <p>Ref: <a href="https://www.researchgate.net/figure/Change-of-luminance-values-for-RGB-channel-by-color-temperature-mode_tbl2_252261682"
+            target="NewTab">Lüminans Değişimi</a>
+    </p>
+
+    <script>
+        "use strict";
+        function factlum(r, g, b, f = 4) {
+            let Y = 0.2126 * r / 255 + 0.7152 * g / 255 + 0.0722 * b / 255
+            return Y
+        }
+        function calculate() {
+            let r = Number(red.value)
+            let g = Number(green.value)
+            let b = Number(blue.value)
+
+            res.innerText = "Lüminans Değeri(Y) = " + factlum(r, g, b)
+        //InnerTextBIR HTML sunucu denetiminin açılış ve kapanış etiketleri arasındaki metni programlı bir şekilde değiştirmek
+        }
+        function doTable() {
+            let r = Number(red.value)
+            let g = Number(green.value)
+            let b = Number(blue.value)
+            const L = [0.5, 1, 1.5, 2, 2.5, 3]
+            let a = L.map((r) => 'RGB Total=' + r+g+b)
+            //“Dizinin her bir elemanı için; parametre olarak verilen (callback) fonksiyonu çağırır ve fonksiyonda belirtilen işlemlere göre yeni bir dizi(array) oluşturur.”
+            let str = header(a)
+            for (let x = 0; x <= 8; x++) {
+                let a = L.map((r) => factlum(r, g, b))
+                str += oneLine(a, x)
+            }
+            return str
+        }
+        let header = (a) => '      ' + a.join('   ')  //pre
+        let oneLine = (a, x) => '\nY=' + x + '  ' + a.join(' ')
+
+        title.innerText = document.title
+        sample.innerText = factlum + '\n' + doTable
+        calculate()
+        out.innerText = doTable()
+    </script>
+
+</body>
+
+</html>
